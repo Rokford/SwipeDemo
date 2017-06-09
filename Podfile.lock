@@ -1,0 +1,32 @@
+PODS:
+  - AffdexSDK-iOS (3.2.0):
+    - AWSKinesis
+  - AWSCore (2.5.3)
+  - AWSKinesis (2.5.3):
+    - AWSCore (= 2.5.3)
+  - Koloda (4.0):
+    - pop (~> 1.0)
+  - pop (1.0.9)
+  - Realm (2.5.1):
+    - Realm/Headers (= 2.5.1)
+  - Realm/Headers (2.5.1)
+  - RealmSwift (2.5.1):
+    - Realm (= 2.5.1)
+
+DEPENDENCIES:
+  - AffdexSDK-iOS
+  - Koloda (~> 4.0)
+  - RealmSwift
+
+SPEC CHECKSUMS:
+  AffdexSDK-iOS: 6c81dfdc813507de029584291c7d08a1a983e376
+  AWSCore: 344e21892790650cf902246d436402257a545bde
+  AWSKinesis: 4959d16b8502f6d1b8764d5a610ee8ee515fd663
+  Koloda: cb171633afc6182a77821b7951e38b2cb272ba7c
+  pop: f667631a5108a2e60d9e8797c9b32ddaf2080bce
+  Realm: 32f86104d37c8521f864d4274050b38ba6190733
+  RealmSwift: f719e7511c902b8908593e8f143f59e47931bdb6
+
+PODFILE CHECKSUM: e35561aad83b04e10f14931707f2698a0253e844
+
+COCOAPODS: 1.2.0
