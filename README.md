@@ -15,8 +15,10 @@ Native iOS Swift app with Cocoapods integrated
 - age recognition is bad, rest is good
 
 # To do
-~~1. Loading into memory the you-know-which xls table (manually convert to csv first). I think we can keep it in memory as 2d array
-2. 'Algorithm' to go through the table~~
+~~1. Loading into memory the you-know-which xls table (manually convert to csv first). I think we can keep it in memory as 2d array~~ 
+
+~~2. 'Algorithm' to go through the table~~  
+
 3. Storyboard with the screens + view controllers
 - 1st screen some initial info and button to start
 - 2nd screen the game screen
