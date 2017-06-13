@@ -6,9 +6,9 @@ use_frameworks!
 target 'SwipeDemoSwift' do
   # Uncomment the next line if you're using Swift or would like to use dynamic frameworks
 
-  pod 'AffdexSDK-iOS'
-	pod 'RealmSwift'
+  	pod 'AffdexSDK-iOS'
 	pod 'Koloda', '~> 4.0'
+
 end
 
 post_install do |installer|

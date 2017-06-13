@@ -39,12 +39,10 @@ class FinanceQuestionsManager : NSObject {
             var possiblePositions: [(exitStep: Int, exitValue: Int)] = []
             let manager = FinanceQuestionsManager.sharedInstance
             
-            for (_ , row) in manager.data.enumerated() {
-//                let element = manager.getDataElement(row: index, column: 0)
-                
+            for row in manager.data {
                 let tupleToCheck = (Int(row[0])!, Int(row[1])!)
                 
-                if !checkTuple(tupleToCheck: tupleToCheck, theTupleArray: possiblePositions) {
+                if !FinanceQuestionsManager.sharedInstance.checkTuple(tupleToCheck: tupleToCheck, theTupleArray: possiblePositions) {
                     let exitStep = Int(row[0])
                     let exitValue = Int(row[1])
                     
@@ -53,19 +51,6 @@ class FinanceQuestionsManager : NSObject {
             }
             
             return possiblePositions
-        }
-        
-        func checkTuple(tupleToCheck:(Int, Int), theTupleArray:[(Int, Int)]) -> Bool{
-            //Iterate over your Array of tuples
-            for arrayObject in theTupleArray{
-                //If a tuple is the same as your tuple to check, it returns true and ends
-                if arrayObject.0 == tupleToCheck.0 && arrayObject.1 == tupleToCheck.1 {
-                    return true
-                }
-            }
-            
-            //If no tuple matches, it returns false
-            return false
         }
     }
     
@@ -84,10 +69,14 @@ class FinanceQuestionsManager : NSObject {
             var possibleSteps: [(exitStep: Int, exitValue: Int)] = []
             
             for row in data {
-                let exitStep = Int(row[2])
-                let exitValue = Int(row[3])
+                let tupleToCheck = (Int(row[2])!, Int(row[3])!)
                 
-                possibleSteps.append((exitStep: exitStep!, exitValue: exitValue!))
+                if !FinanceQuestionsManager.sharedInstance.checkTuple(tupleToCheck: tupleToCheck, theTupleArray: possibleSteps) {
+                    let exitStep = Int(row[2])
+                    let exitValue = Int(row[3])
+                
+                    possibleSteps.append((exitStep: exitStep!, exitValue: exitValue!))
+                }
             }
             
             return possibleSteps
@@ -109,10 +98,14 @@ class FinanceQuestionsManager : NSObject {
             var possibleSteps: [(exitStep: Int, exitValue: Int)] = []
             
             for  row in data {
-                let exitStep = Int(row[4])
-                let exitValue = Int(row[5])
+                let tupleToCheck = (Int(row[4])!, Int(row[5])!)
                 
-                possibleSteps.append((exitStep: exitStep!, exitValue: exitValue!))
+                if !FinanceQuestionsManager.sharedInstance.checkTuple(tupleToCheck: tupleToCheck, theTupleArray: possibleSteps) {
+                    let exitStep = Int(row[4])
+                    let exitValue = Int(row[5])
+                
+                    possibleSteps.append((exitStep: exitStep!, exitValue: exitValue!))
+                }
             }
             
             return possibleSteps
@@ -204,9 +197,21 @@ class FinanceQuestionsManager : NSObject {
         FinanceQuestionsManager.sharedInstance.data = Array(reducedData)
     }
     
+    func checkTuple(tupleToCheck:(Int, Int), theTupleArray:[(Int, Int)]) -> Bool{
+        //Iterate over your Array of tuples
+        for arrayObject in theTupleArray{
+            //If a tuple is the same as your tuple to check, it returns true and ends
+            if arrayObject.0 == tupleToCheck.0 && arrayObject.1 == tupleToCheck.1 {
+                return true
+            }
+        }
+        
+        //If no tuple matches, it returns false
+        return false
+    }
+    
     private override init() {
         // load the data from CSV
-        
         func csv(data: String) -> [[String]] {
             let cleanData = data.replacingOccurrences(of: "\r", with: "")
             var result: [[String]] = []
