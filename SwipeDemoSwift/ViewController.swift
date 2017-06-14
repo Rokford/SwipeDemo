@@ -103,6 +103,13 @@ class ViewController: UIViewController, AFDXDetectorDelegate {
             // handle unprocessed image in this block of code
         }
     }
+    
+    func finishAndShowResultsScreen() {
+        
+        detector?.stop()
+        
+        performSegue(withIdentifier: "showResults", sender: self)
+    }
 }
 
 func ageString(ageInt: UInt32) -> String {
@@ -140,7 +147,9 @@ func genderString(genderInt: UInt32) -> String {
 extension ViewController: KolodaViewDelegate {
     
     func kolodaDidRunOutOfCards(_ koloda: KolodaView) {
-        kolodaView.resetCurrentCardIndex()
+//        kolodaView.resetCurrentCardIndex()
+        
+        finishAndShowResultsScreen()
     }
     
     func koloda(koloda: KolodaView, didSelectCardAt index: Int) {
