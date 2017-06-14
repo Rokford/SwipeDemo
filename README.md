@@ -31,3 +31,4 @@ Native iOS Swift app with Cocoapods integrated
 5. Styling the cards to swipe
 6. Styling the 1st screen
 7. Styling the results screen
+8. displaying the chart for % values in game and letting user drag the chart to set value - maybe use https://github.com/danielgindi/Charts?
