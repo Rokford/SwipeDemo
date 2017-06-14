@@ -50,6 +50,8 @@ class ViewController: UIViewController, AFDXDetectorDelegate {
         
         let result = questionsManager.getResult(investmentTemperamentPosition: fifthQuestionPossiblePositions[0])
         
+        print("\(result)")
+        
         // create the detector
         detector = AFDXDetector(delegate:self, using:AFDX_CAMERA_FRONT, maximumFaces:1)
         
@@ -62,7 +64,7 @@ class ViewController: UIViewController, AFDXDetectorDelegate {
         detector?.gender = true
         detector?.ethnicity = true
 
-        detector!.start()
+        detector?.start()
     }
     
     func detectorDidStartDetectingFace(face : AFDXFace) {
@@ -75,14 +77,13 @@ class ViewController: UIViewController, AFDXDetectorDelegate {
     
     func detector(_ detector : AFDXDetector, hasResults : NSMutableDictionary?, for forImage : UIImage, atTime : TimeInterval) {
         // handle processed and unprocessed images here
-        if hasResults != nil {
+        if let results = hasResults {
             // handle processed image in this block of code
-            
             // enumrate the dictionary of faces
-            for (_, face) in hasResults! {
-                let faceObject = face as! AFDXFace
-                let age = ageString(ageInt: faceObject.appearance.age.rawValue)
-                let gender = genderString(genderInt: faceObject.appearance.gender.rawValue)
+            for (_, face) in results {
+                if let faceObject = face as? AFDXFace {
+                let age = ageString(ageInt: (faceObject.appearance.age.rawValue))
+                let gender = genderString(genderInt: (faceObject.appearance.gender.rawValue))
                 let eth = faceObject.appearance.ethnicity.rawValue
                 
                 let attentionValue = faceObject.expressions.attention
@@ -96,6 +97,7 @@ class ViewController: UIViewController, AFDXDetectorDelegate {
                 attentionLabel.text = "\(Int(attentionValue))"
                 smileLabel.text = "\(Int(smileValue))"
                 smirkLabel.text = "\(Int(smirkValue))"
+                }
             }
         } else {
             // handle unprocessed image in this block of code
