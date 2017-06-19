@@ -25,7 +25,7 @@ Native iOS Swift app with Cocoapods integrated
 -- facial recognition runs in the background here.
 -- cards to swipe left/right are displayed here
 - 3rd screen results
-4. Handling facial recognition results
+4. Handling facial recognition results - working on it initial commit expected today evening, Bart
 - save emotions per question
 - make the results affect the game algorithm
 5. Styling the cards to swipe
