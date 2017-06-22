@@ -9,7 +9,7 @@ import UIKit
 import Affdex
 import Koloda
 
-class ViewController: UIViewController, AFDXDetectorDelegate {
+class ViewController: UIViewController, EmotionRecognitionDelegate {
 
     @IBOutlet weak var kolodaView: KolodaView!
     
@@ -20,8 +20,8 @@ class ViewController: UIViewController, AFDXDetectorDelegate {
     @IBOutlet weak var smirkLabel: UILabel!
     @IBOutlet weak var smileLabel: UILabel!
     
+    var emotionRecognitionManager: EmotionRecognitionManager?
     
-    var detector : AFDXDetector? = nil
     let images: [UIImage] = [#imageLiteral(resourceName: "004-store"), #imageLiteral(resourceName: "001-paper-plane"), #imageLiteral(resourceName: "003-flask"), #imageLiteral(resourceName: "002-form"), #imageLiteral(resourceName: "005-diagram")]
     
     override func viewDidLoad() {
@@ -52,97 +52,32 @@ class ViewController: UIViewController, AFDXDetectorDelegate {
         
         print("\(result)")
         
-        // create the detector
-        detector = AFDXDetector(delegate:self, using:AFDX_CAMERA_FRONT, maximumFaces:1)
-        
-        detector?.smile = true
-        detector?.attention = true
-        detector?.smirk = true
-
-        
-        detector?.age = true
-        detector?.gender = true
-        detector?.ethnicity = true
-
-        detector?.start()
-    }
-    
-    func detectorDidStartDetectingFace(face : AFDXFace) {
-        // handle new face
-    }
-    
-    func detectorDidStopDetectingFace(face : AFDXFace) {
-        // handle loss of existing face
-    }
-    
-    func detector(_ detector : AFDXDetector, hasResults : NSMutableDictionary?, for forImage : UIImage, atTime : TimeInterval) {
-        // handle processed and unprocessed images here
-        if let results = hasResults {
-            // handle processed image in this block of code
-            // enumrate the dictionary of faces
-            for (_, face) in results {
-                if let faceObject = face as? AFDXFace {
-                let age = ageString(ageInt: (faceObject.appearance.age.rawValue))
-                let gender = genderString(genderInt: (faceObject.appearance.gender.rawValue))
-                let eth = faceObject.appearance.ethnicity.rawValue
-                
-                let attentionValue = faceObject.expressions.attention
-                let smileValue = faceObject.expressions.smile
-                let smirkValue = faceObject.expressions.smirk
-                
-                ageLabel.text = "\(age)"
-                genderLabel.text = "\(gender)"
-                ethnicityLabel.text = "\(eth)"
-                
-                attentionLabel.text = "\(Int(attentionValue))"
-                smileLabel.text = "\(Int(smileValue))"
-                smirkLabel.text = "\(Int(smirkValue))"
-                }
-            }
-        } else {
-            // handle unprocessed image in this block of code
-        }
+        emotionRecognitionManager = EmotionRecognitionManager(withDelegate: self)
+        emotionRecognitionManager?.start()
     }
     
     func finishAndShowResultsScreen() {
-        
-        detector?.stop()
-        
+        emotionRecognitionManager?.stop()
         performSegue(withIdentifier: "showResults", sender: self)
     }
-}
-
-func ageString(ageInt: UInt32) -> String {
-    switch ageInt {
-    case 1:
-        return "Under 18"
-    case 2:
-        return "18 - 24"
-    case 3:
-        return "25 - 34"
-    case 4:
-        return "35 - 44"
-    case 5:
-        return "45 - 54"
-    case 6:
-        return "55 - 64"
-    case 7:
-        return "65 or more"
-    default:
-        return "Unknown"
+    
+    // emotion detection delegates
+    func emotionsDetected(result: EmotionRecognitionResult) {
+        ageLabel.text = result.getAgeString()
+        genderLabel.text = result.getGenderString()
+        ethnicityLabel.text = result.getEthnicityString()
+        
+        attentionLabel.text = result.getAttentionString()
+        smileLabel.text = result.getSmileString()
+        smirkLabel.text = result.getSmirkString()
+    }
+    
+    func emotionsDetectionFailed() {
+        // TODO
     }
 }
 
-func genderString(genderInt: UInt32) -> String {
-    switch genderInt {
-    case 1:
-        return "Male"
-    case 2:
-        return "Female"
-    default:
-        return "Unknown"
-    }
-}
+// -------------------
 
 extension ViewController: KolodaViewDelegate {
     
