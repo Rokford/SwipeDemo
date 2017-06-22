@@ -20,6 +20,7 @@
 		693F3FD91EFC42D5001AF82D /* EmotionRecognitionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693F3FD81EFC42D5001AF82D /* EmotionRecognitionDelegate.swift */; };
 		693F3FDB1EFC42FD001AF82D /* EmotionRecognitionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693F3FDA1EFC42FD001AF82D /* EmotionRecognitionManager.swift */; };
 		693F3FDD1EFC431E001AF82D /* String+Emoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693F3FDC1EFC431E001AF82D /* String+Emoji.swift */; };
+		693F3FE41EFC46EB001AF82D /* CameraPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 693F3FE31EFC46EB001AF82D /* CameraPreview.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +40,7 @@
 		693F3FD81EFC42D5001AF82D /* EmotionRecognitionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmotionRecognitionDelegate.swift; sourceTree = "<group>"; };
 		693F3FDA1EFC42FD001AF82D /* EmotionRecognitionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmotionRecognitionManager.swift; sourceTree = "<group>"; };
 		693F3FDC1EFC431E001AF82D /* String+Emoji.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+Emoji.swift"; sourceTree = "<group>"; };
+		693F3FE31EFC46EB001AF82D /* CameraPreview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraPreview.swift; sourceTree = "<group>"; };
 		9A829A52C10AFE3A6A8EB062 /* Pods-SwipeDemoSwift.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwipeDemoSwift.debug.xcconfig"; path = "Pods/Target Support Files/Pods-SwipeDemoSwift/Pods-SwipeDemoSwift.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,6 +96,7 @@
 				65E4F4091E97A1A7004E61AC /* CardOverlayView.xib */,
 				659C96561E9E6A3100DF02A5 /* CardOverlayView.swift */,
 				65DAE6E31EEA88B900D7D61F /* FinanceQuestionsManager.swift */,
+				693F3FE31EFC46EB001AF82D /* CameraPreview.swift */,
 			);
 			path = SwipeDemoSwift;
 			sourceTree = "<group>";
@@ -246,6 +249,7 @@
 				659C96571E9E6A3100DF02A5 /* CardOverlayView.swift in Sources */,
 				693F3FDB1EFC42FD001AF82D /* EmotionRecognitionManager.swift in Sources */,
 				693F3FD91EFC42D5001AF82D /* EmotionRecognitionDelegate.swift in Sources */,
+				693F3FE41EFC46EB001AF82D /* CameraPreview.swift in Sources */,
 				651AEF9C1E967BDB0003C91C /* ViewController.swift in Sources */,
 				65DAE6E41EEA88B900D7D61F /* FinanceQuestionsManager.swift in Sources */,
 				651AEF9A1E967BDB0003C91C /* AppDelegate.swift in Sources */,
