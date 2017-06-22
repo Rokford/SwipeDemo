@@ -21,7 +21,80 @@ class FinanceQuestionsManager : NSObject {
     var emotionalExperiencePosition = 0
     var investmentTemperamentPosition = 0
     
+    var firstQuestion: CalibrationQuestion?
+    var secondQuestion: LossAversionQuestion?
+    var thirdQuestion: UncertanityAversionQuestion?
+    var fourthQuestion: EmotionalExperienceQuestion?
+    var fifthQuestion: InvestmentTemperamentQuestion?
+    
+    private var maxProgressValue: Int = 0
+    private var currentProgress: Int = 0
+
     var data: [[String]] = [[]]
+    
+    private func getMaxProgressValue() -> Int {
+        switch currentQuestion {
+        case 1:
+            let possiblePositions = FinanceQuestionsManager.sharedInstance.firstQuestion!.possiblePositions
+            maxProgressValue = possiblePositions.count
+        case 2:
+            let possibleExitSteps = FinanceQuestionsManager.sharedInstance.secondQuestion!.possibleExitSteps
+            maxProgressValue += possibleExitSteps.count
+        case 3:
+            let possibleExitSteps = FinanceQuestionsManager.sharedInstance.thirdQuestion!.possibleExitSteps
+            maxProgressValue += possibleExitSteps.count
+        case 4:
+            let possiblePositions = FinanceQuestionsManager.sharedInstance.fourthQuestion!.getPossiblePositions()
+            maxProgressValue += possiblePositions.count
+        case 5:
+            let possiblePositions = FinanceQuestionsManager.sharedInstance.fifthQuestion!.getPossiblePositions()
+            maxProgressValue += possiblePositions.count
+        default:
+            return maxProgressValue
+        }
+        
+        return maxProgressValue
+    }
+    
+    // should be called after a question
+    func getCurrentProgress() -> Double {
+        let currentMaxProgress = getMaxProgressValue()
+        
+        switch currentQuestion {
+        case 2:
+            // after 2 question
+            currentProgress = calibrationPosition
+        case 3:
+            //after 3 question
+            let possibleOptions = secondQuestion?.possibleExitSteps.count
+            currentProgress += (possibleOptions! - lossAversionExitStep)
+        case 4:
+            //after 4 question
+            currentProgress += lossAversionExitStep
+        case 5:
+            //after 5 question
+            var points = 0
+            
+            switch emotionalExperiencePosition {
+            case 1:
+                points = 4
+            case 2:
+                points = 3
+            case 3:
+                points = 1
+            default:
+                points = 2
+            }
+            
+            currentProgress += points
+        case 6:
+            currentProgress += investmentTemperamentPosition
+        default:
+            currentProgress = 0
+        }
+        
+        return Double(currentProgress) / Double(currentMaxProgress)
+    }
 
     class CalibrationQuestion {
         var currentPosition = FinanceQuestionsManager.sharedInstance.getDataElement(row: 0, column: 0)
@@ -52,6 +125,10 @@ class FinanceQuestionsManager : NSObject {
             
             return possiblePositions
         }
+        
+        init() {
+            FinanceQuestionsManager.sharedInstance.firstQuestion = self
+        }
     }
     
     class LossAversionQuestion {
@@ -61,6 +138,9 @@ class FinanceQuestionsManager : NSObject {
             FinanceQuestionsManager.sharedInstance.calibrationValue = calibrationValue
             
             FinanceQuestionsManager.sharedInstance.reduceDataTable(step: FinanceQuestionsManager.sharedInstance.calibrationPosition, stepIndex: 0)
+            
+            FinanceQuestionsManager.sharedInstance.currentQuestion = 2
+            FinanceQuestionsManager.sharedInstance.secondQuestion = self
         }
         
         var possibleExitSteps: [(Int, Int)] {
@@ -81,6 +161,12 @@ class FinanceQuestionsManager : NSObject {
             
             return possibleSteps
         }
+        
+        var currentIteration = 1
+        
+        func getValue() -> String {
+            return FinanceQuestionsManager.sharedInstance.getValueFromPosition(theTupleArray: possibleExitSteps, position: currentIteration)
+        }
     }
     
     class UncertanityAversionQuestion {
@@ -90,6 +176,9 @@ class FinanceQuestionsManager : NSObject {
             FinanceQuestionsManager.sharedInstance.lossAversionValue = lossAversionValue
             
             FinanceQuestionsManager.sharedInstance.reduceDataTable(step: lossAversionExitStep, stepIndex: 2)
+            
+            FinanceQuestionsManager.sharedInstance.currentQuestion = 3
+            FinanceQuestionsManager.sharedInstance.thirdQuestion = self
         }
         
         var possibleExitSteps: [(Int, Int)] {
@@ -110,6 +199,12 @@ class FinanceQuestionsManager : NSObject {
             
             return possibleSteps
         }
+        
+        var currentIteration = 1
+        
+        func getValue() -> String {
+            return FinanceQuestionsManager.sharedInstance.getValueFromPosition(theTupleArray: possibleExitSteps, position: currentIteration)
+        }
     }
     
     class EmotionalExperienceQuestion {
@@ -119,6 +214,9 @@ class FinanceQuestionsManager : NSObject {
             FinanceQuestionsManager.sharedInstance.uncertanityAversionValue = uncertanityAversionValue
             
             FinanceQuestionsManager.sharedInstance.reduceDataTable(step: uncertanityAversionExitStep, stepIndex: 4)
+            
+            FinanceQuestionsManager.sharedInstance.currentQuestion = 4
+            FinanceQuestionsManager.sharedInstance.fourthQuestion = self
         }
         
         func getPossiblePositions() -> [Int] {
@@ -141,6 +239,9 @@ class FinanceQuestionsManager : NSObject {
             FinanceQuestionsManager.sharedInstance.emotionalExperiencePosition = emotionalExperiencePosition
             
             FinanceQuestionsManager.sharedInstance.reduceDataTable(step: emotionalExperiencePosition, stepIndex: 6)
+            
+            FinanceQuestionsManager.sharedInstance.currentQuestion = 5
+            FinanceQuestionsManager.sharedInstance.fifthQuestion = self
         }
         
         func getPossiblePositions() -> [Int] {
@@ -158,6 +259,8 @@ class FinanceQuestionsManager : NSObject {
     }
     
     func getResult(investmentTemperamentPosition: Int) -> Int {
+        FinanceQuestionsManager.sharedInstance.currentQuestion = 6
+        
         return getDataElement(row: investmentTemperamentPosition - 1, column: 8)
     }
     
@@ -208,6 +311,20 @@ class FinanceQuestionsManager : NSObject {
         
         //If no tuple matches, it returns false
         return false
+    }
+    
+    private func getValueFromPosition(theTupleArray:[(Int, Int)], position: Int) -> String {
+        for arrayObject in theTupleArray{
+            //If a tuple is the same as your tuple to check, it returns true and ends
+            if arrayObject.0 == position  {
+                let value = arrayObject.1
+                let valueString = "\(String(abs(value)*10000))K CHF"
+                
+                return valueString
+            }
+        }
+        
+        return ""
     }
     
     private override init() {
