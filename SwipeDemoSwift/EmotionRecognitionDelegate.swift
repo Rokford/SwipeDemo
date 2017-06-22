@@ -6,9 +6,11 @@
 //  Copyright © 2017 UBS. All rights reserved.
 //
 
+import UIKit
 import Foundation
 
 protocol EmotionRecognitionDelegate {
-    func emotionsDetected(result: EmotionRecognitionResult)
+    func emojiUpdated(emoji: UIImage?)
+    func confusionDetected()
     func emotionsDetectionFailed()
 }
